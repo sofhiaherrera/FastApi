@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, status
 from app.modelos.clientes import ClienteBase, ClienteCrear, Cliente, ClienteEditar
 from app.modelos.facturas import Factura, FacturaBase, FacturaCrear, FacturaEditar
 from app.modelos.transacciones import Transaccion, TransaccionBase, TransaccionCrear, TransaccionEditar
+from enrutadores import clientes
 
 app = FastAPI()
 
@@ -10,8 +11,8 @@ listar_clientes: list[Cliente]= []
 lista_facturas: list[FacturaBase]= []
 lista_transacciones: list[TransaccionBase]= []
 
-    
-
+#incluir ruta de clientes    
+app.include_router(clientes.rutas_clientes , tags= ["Clientes"])
 
 #crear los endpoint para facturas 
 

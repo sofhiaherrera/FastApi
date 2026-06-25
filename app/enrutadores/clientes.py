@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from..modelos.clientes import Cliente, ClienteCrear, ClienteEditar
+from modelos.clientes import Cliente, ClienteCrear, ClienteEditar
 
 rutas_clientes = APIRouter()
-listar_clientes: list[Cliente]
+listar_clientes: list[Cliente] =[]
 
 
 #endpoint, para listar todos los clientes
@@ -32,6 +32,8 @@ async def crear_cliente(datos_cliente: ClienteCrear):
     listar_clientes.append(Cliente_val)
     return Cliente_val
 # Clase: git checkout para separar commits
+
+
 #endpoint, para editar un cliente y agregar a la lista
 @rutas_clientes.patch("/clientes/{cliente_id}", response_model=Cliente)
 async def editar_cliente(cliente_id: int, datos_cliente: ClienteEditar):
