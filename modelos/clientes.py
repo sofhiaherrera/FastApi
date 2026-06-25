@@ -7,8 +7,14 @@ class ClienteBase(BaseModel):
     email: str
     descripcion: str
 
+
 class ClienteCrear(ClienteBase):
     pass
 
-    class Cliente(ClienteBase):
-        id: int | None = None
+
+class ClienteEditar(ClienteBase):
+    pass 
+
+
+class Cliente(ClienteBase):
+    id: int | None = None
