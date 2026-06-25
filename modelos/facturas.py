@@ -1,9 +1,9 @@
 from pydantic import BaseModel
-from clientes import Cliente
+from .clientes import Cliente
 
 
 #crear el modelo transacciones (id, fecha, vr_total, cliente)
-class Factura(BaseModel):
+class FacturaBase(BaseModel):
     fecha : str
     vr_total: float #calcular (cantidad * vr_unitario)
     cliente: Cliente #Relación con el cliente {objeto}

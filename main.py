@@ -1,14 +1,14 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, status
 from modelos.clientes import ClienteBase, ClienteCrear, Cliente, ClienteEditar
-from modelos. facturas import Factura, FacturaCrear, FacturaEditar
-from modelos.transacciones import Transaccion, TransaccionCrear, TransaccionEditar
+from modelos.facturas import Factura, FacturaBase, FacturaCrear, FacturaEditar
+from modelos.transacciones import Transaccion, TransaccionBase, TransaccionCrear, TransaccionEditar
 
 app = FastAPI()
 
 
 listar_clientes: list[Cliente]= []
-lista_facturas: list[Factura]= []
-lista_transacciones: list[Transaccion]= []
+lista_facturas: list[FacturaBase]= []
+lista_transacciones: list[TransaccionBase]= []
 
 
 #endpoint, para listar todos los clientes
@@ -24,6 +24,8 @@ async def listar_cliente(cliente_id: int):
     for i, obj_cliente in enumerate(listar_clientes):
         if obj_cliente.id == cliente_id:
             return obj_cliente
+        raise HTTPException(status_code=400, detail=f"La cliente con id {factura_id}no existe"
+        )
 
 
 #endpoint, para crear un cliente y agregar a la lista
@@ -52,6 +54,7 @@ async def editar_cliente(cliente_id: int, datos_cliente: ClienteEditar):
 
 
 
+
 #endpoint de eliminar cliente
 @app.delete("/clientes/{cliente_id}", response_model=Cliente)
 async def elimnar_cliente(cliente_id: int):
@@ -73,9 +76,15 @@ async def listar_facturas():
     return lista_facturas
 
 
-@app.get("/facturas/{id_factura}", response_model= Factura)
-async def listar_factura(id_factura: int):
-    pass
+@app.get("/facturas/{factura_id}", response_model= Factura)
+async def listar_factura(factura_id: int):
+    #recorrer la lista de facturas
+    for i, obj_factura in enumerate(lista_facturas):
+        if obj_factura.id == factura_id:
+            return obj_factura
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                         detail=f"La factura con id {factura_id}no existe"
+        )
 
 
 @app.post("/facturas/{id_cliente}", response_model= Factura)
