@@ -4,7 +4,9 @@ from modelos.clientes import ClienteBase, ClienteCrear, Cliente, ClienteEditar
 app = FastAPI()
 
 
-listar_clientes: list[ClienteBase]= []
+listar_clientes: list[Cliente]= []
+lista_facturas: list[Factura]= []
+lista_transacciones: list[Transacciones]= []
 
 
 #endpoint, para listar todos los clientes
@@ -42,5 +44,18 @@ async def editar_cliente(cliente_id: int, datos_cliente: ClienteEditar):
             Cliente_val.id = cliente_id
             listar_clientes[1] = Cliente_val
             return Cliente_val
-    raise HTTPException(status_code=400, detail=f"El cliente con id{cliente_id}, no existe"
+    raise HTTPException(
+        status_code=400, detail=f"El cliente con id{cliente_id}, no existe"
                         )
+
+
+#endpoint de eliminar cliente
+@app.delete("/clientes/{cliente_id}", response_model=Cliente)
+async def elimnar_cliente(cliente_id: int):
+    for i, obj_cliente in enumerate(listar_clientes):
+        if obj_cliente.id == cliente_id:
+            cliente_eliminado = listar_clientes.pop(i)
+            return cliente_eliminado
+        raise HTTPException(
+            status_code=400, detail=f"El cliente con id {cliente_id}, no existe"
+        )
