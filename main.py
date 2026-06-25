@@ -26,3 +26,4 @@ def crear_cliente(datos_cliente: ClienteCrear):
     ClienteBase_val = ClienteBase.model_validate(datos_cliente.model_dump())
     listar_clientes.append(ClienteBase_val)
     return ClienteBase_val
+# Clase: git checkout para separar commits
