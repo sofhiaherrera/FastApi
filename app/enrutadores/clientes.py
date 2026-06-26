@@ -31,13 +31,12 @@ async def listar_cliente(cliente_id: int, mi_sesion: Sesion_dependencia):
 #endpoint, para crear un cliente y agregar a la lista
 @rutas_clientes.post("/clientes", response_model=Cliente)
 async def crear_cliente(datos_cliente: ClienteCrear, mi_sesion: Sesion_dependencia):
-    Cliente_val = Cliente.model_validate(datos_cliente.model_dump())
+    Cliente_val = Cliente(**datos_cliente.model_dump())
     mi_sesion.add(Cliente_val)
     mi_sesion.commit()
     mi_sesion.refresh(Cliente_val)
     return Cliente_val
 # Clase: git checkout para separar commits
-
 
 #endpoint, para editar un cliente y agregar a la lista
 @rutas_clientes.patch("/clientes/{cliente_id}", response_model=Cliente)
