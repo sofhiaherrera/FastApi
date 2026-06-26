@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from modelos.clientes import Cliente, ClienteCrear, ClienteEditar
 from listas import lista_clientes, lista_facturas
 from conexion_bd import Sesion_dependencia
+from sqlmodel import select
 
 rutas_clientes = APIRouter()
 #lista_clientes: list[Cliente] =[]
@@ -9,8 +10,9 @@ rutas_clientes = APIRouter()
 
 #endpoint, para listar todos los clientes
 @rutas_clientes.get("/clientes", response_model=list[Cliente])
-async def obtener_clientes():
-    return lista_clientes
+async def obtener_clientes(sesion: Sesion_dependencia):
+    lista_cli = sesion.exec(select(Cliente)).all()
+    return lista_cli
 
 
 #endpoint, para obtebe o listar un solo cliente de la lista
