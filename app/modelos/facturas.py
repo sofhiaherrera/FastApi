@@ -1,7 +1,6 @@
 from pydantic import BaseModel, computed_field
-
-from app.modelos.transacciones import Transaccion
-from .clientes import Cliente
+from modelos.transacciones import Transaccion
+from modelos.clientes import Cliente
 from datetime import datetime
 
 

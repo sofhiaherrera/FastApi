@@ -1,24 +1,25 @@
 from fastapi import APIRouter, HTTPException
 from modelos.clientes import Cliente, ClienteCrear, ClienteEditar
+from listas import lista_clientes, lista_facturas
 
 rutas_clientes = APIRouter()
-listar_clientes: list[Cliente] =[]
+#lista_clientes: list[Cliente] =[]
 
 
 #endpoint, para listar todos los clientes
 @rutas_clientes.get("/clientes", response_model=list[Cliente])
 async def obtener_clientes():
-    return listar_clientes
+    return lista_clientes
 
 
 #endpoint, para obtebe o listar un solo cliente de la lista
 @rutas_clientes.get("/clientes/{cliente_id}", response_model=Cliente)
 async def listar_cliente(cliente_id: int):
     #recorrer la lista cliente
-    for i, obj_cliente in enumerate(listar_clientes):
+    for i, obj_cliente in enumerate(lista_clientes):
         if obj_cliente.id == cliente_id:
             return obj_cliente
-        raise HTTPException(status_code=400, detail=f"La cliente con id {factura_id}no existe"
+        raise HTTPException(status_code=400, detail=f"La cliente con id {cliente_id}no existe"
         )
 
 
@@ -27,9 +28,9 @@ async def listar_cliente(cliente_id: int):
 async def crear_cliente(datos_cliente: ClienteCrear):
     Cliente_val = Cliente.model_validate(datos_cliente.model_dump())
     #generar id
-    id_cliente = len(listar_clientes)+1
+    id_cliente = len(lista_clientes)+1
     Cliente_val.id =id_cliente
-    listar_clientes.append(Cliente_val)
+    lista_clientes.append(Cliente_val)
     return Cliente_val
 # Clase: git checkout para separar commits
 
@@ -37,12 +38,12 @@ async def crear_cliente(datos_cliente: ClienteCrear):
 #endpoint, para editar un cliente y agregar a la lista
 @rutas_clientes.patch("/clientes/{cliente_id}", response_model=Cliente)
 async def editar_cliente(cliente_id: int, datos_cliente: ClienteEditar):
-    for i, obj_cliente in enumerate(listar_clientes):
+    for i, obj_cliente in enumerate(lista_clientes):
         if obj_cliente.id == cliente_id:
             #validar clientes
             Cliente_val = Cliente.model_validate(datos_cliente.model_dump())
             Cliente_val.id = cliente_id
-            listar_clientes[1] = Cliente_val
+            lista_clientes[1] = Cliente_val
             return Cliente_val
     raise HTTPException(
         status_code=400, detail=f"El cliente con id{cliente_id}, no existe"
@@ -54,9 +55,9 @@ async def editar_cliente(cliente_id: int, datos_cliente: ClienteEditar):
 #endpoint de eliminar cliente
 @rutas_clientes.delete("/clientes/{cliente_id}", response_model=Cliente)
 async def elimnar_cliente(cliente_id: int):
-    for i, obj_cliente in enumerate(listar_clientes):
+    for i, obj_cliente in enumerate(lista_clientes):
         if obj_cliente.id == cliente_id:
-            cliente_eliminado = listar_clientes.pop(i)
+            cliente_eliminado = lista_clientes.pop(i)
             return cliente_eliminado
         raise HTTPException(
             status_code=400, detail=f"El cliente con id {cliente_id}, no existe"
